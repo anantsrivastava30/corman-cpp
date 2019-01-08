@@ -40,20 +40,10 @@ void bst(){
 
 void redblacktree() {
     rbt::RBTree rbtree;
-    rbtree.rb_insert(11);
-    rbtree.rb_insert(2);
-    rbtree.rb_insert(14);
-    rbtree.rb_insert(1);
-    rbtree.rb_insert(7);
-    rbtree.rb_insert(15);
-    rbtree.rb_insert(5);
-    rbtree.rb_insert(8);
-    
+    for (int i = 1; i <= 100; ++i) {
+        rbtree.rb_insert(i);
+    }
     //cout << rbtree.root->val << endl;
-    rbtree.rb_inorder(rbtree.root, 0);
-    
-    rbtree.rb_insert(4);
-    cout << "------------" << endl;
     rbtree.rb_inorder(rbtree.root, 0);
 }
 
