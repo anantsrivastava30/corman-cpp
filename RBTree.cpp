@@ -115,7 +115,83 @@ void rbt::RBTree::rb_insert_fixup(rbt::Node * z) {
     this->root->color = 1;
 }
 
-void rbt::RBTree::rb_inorder(Node *node, int indent) {
+void rbt::RBTree::rb_transplant(Node * u, Node * v) {
+    if (u->parent == this->nil)
+        this->root = v;
+    else if(u == u->parent->right)
+        u->parent->right = v;
+    else
+        u->parent->left = v;
+    v->parent = u->parent;
+}
+
+rbt::Node * rbt::RBTree::rb_search(int value) {
+    rbt::Node * x = this->root;
+    while (x != this->nil && value != x->val) {
+        if (value < x->val)
+            x = x->left;
+        else
+            x = x->right;
+    }
+    return x;
+}
+
+rbt::Node * rbt::RBTree::rb_min(rbt::Node * node) {
+    while (node->left != this->nil) {
+        node = node->left;
+    }
+    return node;
+}
+
+void rbt::RBTree::rb_delete(int value) {
+    rbt::Node * z = rbt::RBTree::rb_search(value);
+    rbt::Node * y = z;
+    rbt::Node * x = nullptr;
+    bool y_orig_color = y->color;
+    if(z->left == this->nil) {
+        x = z->right;
+        rbt::RBTree::rb_transplant(z, z->right);
+    } else if (z->right == this->nil) {
+        x = z->left;
+        rbt::RBTree::rb_transplant(z, z->left);
+    } else {
+        y = rbt::RBTree::rb_min(z->right);
+        y_orig_color = y->color;
+        x = y->right;
+        if(y->parent == z)
+            x->parent = y;
+        else {
+            rbt::RBTree::rb_transplant(y, y->right);
+            y->right = z->right;
+            y->right->parent = y;
+        }
+        rbt::RBTree::rb_transplant(z, y);
+        y->left = z->left;
+        y->left->parent = y;
+        y->color = z->color;
+    }
+    if(y_orig_color == 1)
+        rbt::RBTree::rb_delete_fixup(x);
+}
+
+void rbt::RBTree::rb_delete_fixup(rbt::Node * x) {
+    rbt::Node * w = nullptr;
+    while (x != this->root && x->color == 1) {
+        if (x == x->parent->left) {
+            w = x->parent->right;
+            if (w->color == 0) {
+                w->color = 1;
+                x->parent->color = 0;
+                rbt::RBTree::left_rotate(x->parent);
+            }
+            if (w->left->color == 1 && w->right->color) {
+                <#statements#>
+            }
+        }
+    }
+}
+
+void rbt::RBTree::rb_inorder(rbt::Node *node, int indent) {
     if(node == nullptr)
         return;
     else {
@@ -126,3 +202,4 @@ void rbt::RBTree::rb_inorder(Node *node, int indent) {
         rbt::RBTree::rb_inorder(node->left, indent + 4);
     }
 }
+

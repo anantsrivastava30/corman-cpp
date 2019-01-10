@@ -40,11 +40,14 @@ void bst(){
 
 void redblacktree() {
     rbt::RBTree rbtree;
-    for (int i = 1; i <= 100; ++i) {
+    for (int i = 1; i <= 10; ++i) {
         rbtree.rb_insert(i);
     }
     //cout << rbtree.root->val << endl;
     rbtree.rb_inorder(rbtree.root, 0);
+    std::string s(20, '-');
+    cout << s << endl;
+    rbtree.rb_delete(4);
 }
 
 int main(int argc, const char * argv[]) {
