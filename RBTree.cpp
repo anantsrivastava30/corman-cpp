@@ -183,12 +183,52 @@ void rbt::RBTree::rb_delete_fixup(rbt::Node * x) {
                 w->color = 1;
                 x->parent->color = 0;
                 rbt::RBTree::left_rotate(x->parent);
+                w = x->parent->right;
             }
-            if (w->left->color == 1 && w->right->color) {
-                <#statements#>
+            if (w->left->color == 1 && w->right->color == 1) {
+                w->color = 0;
+                x = x->parent;
+            } else {
+                if (w->right->color == 1) {
+                    w->left->color = 1;
+                    w->color = 0;
+                    rbt::RBTree::right_rotate(w);
+                    w = x->parent->right;
+                }
+                w->color = x->parent->color;
+                x->parent->color = 1;
+                w->right->color = 1;
+                rbt::RBTree::left_rotate(x->parent);
+                x = this->root;
+            }
+        }
+        else {
+            w = x->parent->left;
+            if (w->color == 0) {
+                w->color = 1;
+                x->parent->color = 0;
+                rbt::RBTree::right_rotate(x->parent);
+                w = x->parent->left;
+            }
+            if (w->right->color == 1 && w->left->color == 1) {
+                w->color = 0;
+                x = x->parent;
+            } else {
+                if (w->left->color == 1) {
+                    w->right->color = 1;
+                    w->color = 0;
+                    rbt::RBTree::left_rotate(w);
+                    w = x->parent->left;
+                }
+                w->color = x->parent->color;
+                x->parent->color = 1;
+                w->left->color = 1;
+                rbt::RBTree::right_rotate(x->parent);
+                x = this->root;
             }
         }
     }
+    x->color = 1;
 }
 
 void rbt::RBTree::rb_inorder(rbt::Node *node, int indent) {

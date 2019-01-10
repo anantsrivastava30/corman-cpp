@@ -47,7 +47,8 @@ void redblacktree() {
     rbtree.rb_inorder(rbtree.root, 0);
     std::string s(20, '-');
     cout << s << endl;
-    rbtree.rb_delete(4);
+    rbtree.rb_delete(8);
+    rbtree.rb_inorder(rbtree.root, 0);
 }
 
 int main(int argc, const char * argv[]) {
